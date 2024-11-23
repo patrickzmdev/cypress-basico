@@ -5,7 +5,7 @@ describe('input fields', () => {
         cy.goLogin();
       });
 
-    it('deve preencher o campo de texto', () => {
+    it('Deve preencher o campo de texto', () => {
 
         cy.goTo('/input-fields','Input Fields' );
 

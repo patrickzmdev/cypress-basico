@@ -7,10 +7,14 @@ describe("upload", () => {
     });
 
     it("deve anexar um doc", () => {
+        const file = "teste.xlsx";
         cy.get('input[name="doc"]')
-            .selectFile("cypress/fixtures/doc.pdf")
+        .attachFile({
+            filePath: file,
+            encoding: 'utf8'
+            })
             .then((element) => {
-                expect(element[0].files[0].name).to.equal("doc.pdf");
+                expect(element[0].files[0].name).to.equal("teste.xlsx");
             });
     });
 
@@ -26,6 +30,6 @@ describe("upload", () => {
             .find('img')
             .should('be.visible')
             .should('have.attr', 'src') //have attr serve para verificar se possui o atributo nesse caso se a imagem possui src
-            .and('include', 'blob'); //verifica se contem blob que no caso serve para verificar a pré visualizacao da imagem 
+            .and('include', 'blob'); //verifica se contem blob que no caso serve para verificar a pré visualizacao da imagem
     });
 });

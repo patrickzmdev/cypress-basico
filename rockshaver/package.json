@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "cypress-mongodb": "^6.2.1"
+  },
+  "devDependencies": {
+    "bson": "^6.10.1"
+  }
+}

@@ -3,22 +3,22 @@ import agendamentos from "../fixtures/agendamentos.json";
 
 describe("agendamento", () => {
 
-  it("deve realizar um novo agendamento", () => {
-    const agendamento = agendamentos.sucesso;
-
-    cy.dropCollection("agendamentos", { failSilently: "true" }).then(
-      (result) => {
-        cy.log(result);
-      }
-    );
-
+  beforeEach(() => {
     cy.intercept("GET", "http://localhost:3333/api/calendario", {
       statusCode: 200,
       body: calendario,
     }).as("getCalendario");
+  });
 
-    cy.iniciarPreCadastro(agendamento.usuario);
-    cy.verificarPreCadastro(agendamento.usuario);
+  it("deve realizar um novo agendamento", () => {
+    const agendamento = agendamentos.sucesso;
+
+    cy.deleteMany({emailCliente: agendamento.usuario.email},{collection:"agendamentos"}).then(
+      (result) => {
+        cy.log(result);
+      }
+    );
+    cy.preCadastroLS(agendamento.usuario);
     cy.iniciarAgendamento();
     cy.escolherProfissional(agendamento.profissional.nome);
     cy.selecionarServico(agendamento.servico.descricao);
@@ -30,24 +30,37 @@ describe("agendamento", () => {
 
   it("deve mostrar o slot ocupado", () => {
     const agendamento = agendamentos.duplicado;
-    cy.dropCollection("agendamentos", { failSilently: "true" }).then(
+    cy.deleteMany({emailCliente: agendamento.usuario.email},{collection:"agendamentos"}).then(
       (result) => {
         cy.log(result);
       }
     );
     cy.agendamentoApi(agendamento);
-
-    cy.intercept("GET", "http://localhost:3333/api/calendario", {
-      statusCode: 200,
-      body: calendario,
-    }).as("getCalendario");
-
-    cy.iniciarPreCadastro(agendamento.usuario);
-    cy.verificarPreCadastro(agendamento.usuario);
+    cy.preCadastroLS(agendamento.usuario);
     cy.iniciarAgendamento();
     cy.escolherProfissional(agendamento.profissional.nome);
     cy.selecionarServico(agendamento.servico.descricao);
     cy.escolherDiaAgendamento(agendamento.dia);
     cy.get(`[slot="${agendamento.hora} - ocupado"]`).should("be.visible").find('svg').should("be.visible").and('have.css','color','rgb(255, 255, 255)');
+  });
+
+  it("deve retornar uma notificacao no sumario em caso de disponibilidade", () => {
+    const agendamento = agendamentos.conflito;
+    cy.deleteMany({emailCliente: agendamento.usuario.email},{collection:"agendamentos"}).then(
+      (result) => {
+        cy.log(result);
+      }
+    );
+    cy.preCadastroLS(agendamento.usuario);
+    cy.iniciarAgendamento();
+    cy.escolherProfissional(agendamento.profissional.nome);
+    cy.selecionarServico(agendamento.servico.descricao);
+    cy.escolherDiaAgendamento(agendamento.dia);
+    cy.escolherHoraAgendamento(agendamento.hora);
+
+    cy.agendamentoApi(agendamento);
+
+    cy.finalizarAgendamento();
+    cy.get('.alert-error').should('be.visible').and('have.text','Já existe um agendamento para esta data e hora. Por favor, escolha outro horário.');
   });
 });

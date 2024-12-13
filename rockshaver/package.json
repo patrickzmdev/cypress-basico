@@ -3,6 +3,7 @@
     "cypress-mongodb": "^6.2.1"
   },
   "devDependencies": {
-    "bson": "^6.10.1"
+    "bson": "^6.10.1",
+    "dotenv": "^16.4.7"
   }
 }

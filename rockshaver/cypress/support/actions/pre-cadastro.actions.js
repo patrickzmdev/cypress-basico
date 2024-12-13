@@ -32,6 +32,16 @@ Cypress.Commands.add('verificarPreCadastro', (usuario) => {
 
 });
 
+Cypress.Commands.add('preCadastroLS', (usuario) => {
+  cy.window().then(win => {
+    win.localStorage.setItem('usuario', JSON.stringify(usuario));
+
+    cy.visit('/');
+    cy.contains(usuario.email).should('be.visible');
+  });
+
+});
+
 Cypress.Commands.add('verificarAlerta', (campo,texto) => {
   cy.contains('label', campo).parent().find('.alert-msg').should('be.visible').and('contain', texto);
 });

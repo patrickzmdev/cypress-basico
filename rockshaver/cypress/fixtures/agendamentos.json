@@ -16,7 +16,23 @@
       "email": "patrick@gmail.com.br"
     }
   },
-  "conflito": {},
+  "conflito": {
+    "data": "14/12/2024",
+      "hora": "16:00",
+      "dia": 14,
+      "profissional": {
+        "matricula": 1006,
+        "nome": "Jimi"
+      },
+      "servico": {
+        "codigo": 1,
+        "descricao": "Corte"
+      },
+      "usuario": {
+        "nome": "Patrick Zanela",
+        "email": "patrickzanela@gmail.com.br"
+      }
+  },
   "duplicado": {
       "data": "12/12/2024",
       "hora": "09:00",

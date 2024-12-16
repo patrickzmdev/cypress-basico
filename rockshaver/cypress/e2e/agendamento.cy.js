@@ -4,13 +4,13 @@ import agendamentos from "../fixtures/agendamentos.json";
 describe("agendamento", () => {
 
   beforeEach(() => {
-    cy.intercept("GET", "http://localhost:3333/api/calendario", {
+    cy.intercept("GET", "**/api/calendario", {
       statusCode: 200,
       body: calendario,
     }).as("getCalendario");
   });
 
-  it("deve realizar um novo agendamento", () => {
+  it.only("deve realizar um novo agendamento", () => {
     const agendamento = agendamentos.sucesso;
 
     cy.deleteMany({emailCliente: agendamento.usuario.email},{collection:"agendamentos"}).then(
